@@ -1,9 +1,9 @@
-require File.join(LIB_ROOT, "step")
+require File.join(LIB_ROOT, "steep")
 
 require "logger"
 
-RSpec.describe Step do
-  context "Given a step with length of 30 and a logger" do
+RSpec.describe Steep do
+  context "Given a steep with length of 30 and a logger" do
     subject { described_class.new(length: 30, logger: mock_logger) }
 
     let(:mock_logger) { instance_double(Logger, info: nil) }

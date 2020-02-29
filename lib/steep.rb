@@ -1,4 +1,4 @@
-class Step
+class Steep
   attr_reader :length, :logger
 
   def initialize(length:, logger:)
