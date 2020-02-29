@@ -78,32 +78,83 @@ RSpec.describe Session do
         ]}
 
         it "runs through them in order" do
-            expect(Steep)
-              .to receive(:new)
-              .with(length: 7, logger: mock_logger)
-              .once
-              .ordered
-              .and_return(first_steep)
+          expect(Steep)
+            .to receive(:new)
+            .with(length: 7, logger: mock_logger)
+            .once
+            .ordered
+            .and_return(first_steep)
 
-            expect(first_steep)
-              .to receive(:start)
-              .once
-              .ordered
+          expect(first_steep)
+            .to receive(:start)
+            .once
+            .ordered
 
-            expect(Steep)
-              .to receive(:new)
-              .with(length: 3, logger: mock_logger)
-              .once
-              .ordered
-              .and_return(second_steep)
+          expect(Steep)
+            .to receive(:new)
+            .with(length: 3, logger: mock_logger)
+            .once
+            .ordered
+            .and_return(second_steep)
 
-            expect(second_steep)
-              .to receive(:start)
-              .once
-              .ordered
+          expect(second_steep)
+            .to receive(:start)
+            .once
+            .ordered
 
-            subject.next
-            subject.next
+          subject.next
+          subject.next
+        end
+      end
+
+      context "with a step containing increment and count of 2" do
+        before do
+          allow(Steep)
+            .to receive(:new)
+            .and_return(mock_steep)
+        end
+
+        let(:config) {[
+          {
+            length: 3
+          },
+          {
+            increment: 10,
+            count: 2
+          },
+          {
+            length: 9
+          }
+        ]}
+
+        let(:mock_steep) { instance_double(Steep, start: nil) }
+
+        it "increments the last step by increment amount count times" do
+          expect(Steep)
+            .to receive(:new)
+            .with(length: 3, logger: mock_logger)
+            .once
+            .ordered
+
+          expect(Steep)
+            .to receive(:new)
+            .with(length: 13, logger: mock_logger)
+            .once
+            .ordered
+
+          expect(Steep)
+            .to receive(:new)
+            .with(length: 23, logger: mock_logger)
+            .once
+            .ordered
+
+          expect(Steep)
+            .to receive(:new)
+            .with(length: 31, logger: mock_logger)
+            .once
+            .ordered
+
+          4.times { subject.next }
         end
       end
     end
