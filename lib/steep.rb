@@ -6,7 +6,7 @@ class Steep
     @logger = logger
   end
 
-  def run
+  def start
     while length > 0 do
 
       log_multiples_of_ten

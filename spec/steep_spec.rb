@@ -8,7 +8,7 @@ RSpec.describe Steep do
 
     let(:mock_logger) { instance_double(Logger, info: nil) }
 
-    describe "#run" do
+    describe "#start" do
       before do
         allow(subject)
           .to receive(:sleep)
@@ -20,7 +20,7 @@ RSpec.describe Steep do
           .with(1)
           .exactly(30).times
 
-        subject.run
+        subject.start
       end
 
       it "logs every ten seconds" do
@@ -48,7 +48,7 @@ RSpec.describe Steep do
           .once
           .ordered
 
-        subject.run
+        subject.start
       end
     end
   end
