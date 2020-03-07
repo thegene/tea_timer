@@ -1,21 +1,25 @@
 require_relative "steep"
 
 class Session
-  attr_reader :plan, :logger, :last_length
+  attr_reader :plan, :logger
+  attr_accessor :last_steep, :count, :current_step
 
   def initialize(plan:, logger:)
     @plan = plan
     @logger = logger
-    @last_length = 0
+    @last_steep = 0
     @incrementer_count = 0
+    @current_step = nil
+    @count = 0
   end
 
   def next
     step = next_step
 
-    length = length_from(step)
-    binding.pry
-    capture_length(length)
+    length_strategy = strategy_from(step)
+    length = length_strategy.length
+
+    self.last_steep = length
 
     Steep
       .new(length: length, logger: logger)
@@ -24,25 +28,54 @@ class Session
 
   private
 
+  def step_count(step)
+    step[:count]&.to_i || 1
+  end
+
   def steps
     @steps ||= plan.config
   end
 
   def next_step
-    steps.shift.tap do |step|
-      steps << step if steps.empty?
+    self.count -= 1
+    if self.count > 0
+      current_step
+    else
+      steps.shift.tap do |step|
+        steps << step if steps.empty?
+
+        self.count = step_count(step)
+        self.current_step = step
+      end
     end
   end
 
-  def length_from(step)
-    if step[:length]
-      step[:length]
-    elsif step[:increment]
-      last_length + step[:increment].to_i
+  def strategy_from(step)
+    if step[:increment]
+      IncrementStrategy.new(last_steep, step)
+    elsif step[:length]
+      ExactStrategy.new(step)
     end
   end
 
-  def capture_length(length)
-    @last_length += length
+  class ExactStrategy
+    attr_reader :length
+
+    def initialize(step)
+      @length = step.fetch(:length).to_i
+    end
+  end
+
+  class IncrementStrategy
+    attr_reader :increment, :last_steep
+
+    def initialize(last_steep, step)
+      @increment = step.fetch(:increment)
+      @last_steep = last_steep
+    end
+
+    def length
+      last_steep.to_i + increment.to_i
+    end
   end
 end

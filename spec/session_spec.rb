@@ -107,7 +107,7 @@ RSpec.describe Session do
         end
       end
 
-      context "with a step containing increment and count of 2" do
+      context "with steps that have count and increment" do
         before do
           allow(Steep)
             .to receive(:new)
@@ -116,7 +116,8 @@ RSpec.describe Session do
 
         let(:config) {[
           {
-            length: 3
+            length: 3,
+            count: 2,
           },
           {
             increment: 10,
@@ -133,7 +134,7 @@ RSpec.describe Session do
           expect(Steep)
             .to receive(:new)
             .with(length: 3, logger: mock_logger)
-            .once
+            .exactly(2).times
             .ordered
 
           expect(Steep)
@@ -150,11 +151,11 @@ RSpec.describe Session do
 
           expect(Steep)
             .to receive(:new)
-            .with(length: 31, logger: mock_logger)
+            .with(length: 9, logger: mock_logger)
             .once
             .ordered
 
-          4.times { subject.next }
+          5.times { subject.next }
         end
       end
     end
