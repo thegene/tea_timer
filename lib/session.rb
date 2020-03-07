@@ -33,7 +33,7 @@ class Session
   end
 
   def steps
-    @steps ||= plan.config
+    @steps ||= plan
   end
 
   def next_step

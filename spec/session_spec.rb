@@ -8,7 +8,6 @@ RSpec.describe Session do
     subject { described_class.new(plan: plan, logger: mock_logger) }
 
     let(:mock_logger) { instance_double(Logger, info: nil) }
-    let(:plan) { double(:plan, config: config) }
 
     let(:first_steep) { instance_double(Steep) }
     let(:second_steep) { instance_double(Steep) }
@@ -16,7 +15,7 @@ RSpec.describe Session do
 
     describe "#next" do
       context "with a single step of 20 seconds" do
-        let(:config) {[{
+        let(:plan) {[{
           length: 20
         }]}
 
@@ -68,7 +67,7 @@ RSpec.describe Session do
       end
 
       context "with two steps" do
-        let(:config) {[
+        let(:plan) {[
           {
             length: 7
           },
@@ -114,7 +113,7 @@ RSpec.describe Session do
             .and_return(mock_steep)
         end
 
-        let(:config) {[
+        let(:plan) {[
           {
             length: 3,
             count: 2,
