@@ -23,6 +23,7 @@ class CLI < Thor
     puts "steeping..."
     steep.start
     puts "done!"
+    puts "\a"
 
     steep_next
   end
