@@ -1,5 +1,4 @@
 require "thor"
-require "logger"
 
 require_relative "session"
 

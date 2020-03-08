@@ -1,19 +1,18 @@
 require_relative "steep"
 
 class Session
-  attr_reader :plan, :logger
+  attr_reader :plan
   attr_accessor :last_steep, :count, :current_step
 
-  def initialize(plan:, logger:)
+  def initialize(plan:)
     @plan = plan
-    @logger = logger
     @last_steep = 0
     @incrementer_count = 0
     @current_step = nil
     @count = 0
   end
 
-  def next
+  def next_steep
     step = next_step
 
     length_strategy = strategy_from(step)
@@ -21,9 +20,7 @@ class Session
 
     self.last_steep = length
 
-    Steep
-      .new(length: length, logger: logger)
-      .start
+    Steep.new(length: length)
   end
 
   private
