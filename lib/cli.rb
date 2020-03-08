@@ -29,7 +29,7 @@ class CLI < Thor
 
   def default_plan
     [{
-      increment: 1
+      increment: 10
     }]
   end
 
