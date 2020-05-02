@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require_relative "../lib/cli"
 
 CLI.start(ARGV)
